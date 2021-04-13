@@ -16,3 +16,8 @@ Advanced Features (Planned)
 -  Add food expiration
 -  Scan sell by/expiration date
 -  More to come
+
+
+Scrum master: Jake Gamble
+Product Owner: Allie Haberlin
+Developers: Nicholas Gross, N'Dazia Farizer, Bruce Darelius
