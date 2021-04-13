@@ -19,5 +19,7 @@ Advanced Features (Planned)
 
 
 Scrum master: Jake Gamble
+
 Product Owner: Allie Haberlin
+
 Developers: Nicholas Gross, N'Dazia Farizer, Bruce Darelius
