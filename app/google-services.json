@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "488153330962",
+    "project_id": "rwu-fridge210",
+    "storage_bucket": "rwu-fridge210.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:488153330962:android:cf9b7982e33e937cc92fcb",
+        "android_client_info": {
+          "package_name": "com.example.fridgemangementcs210group2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "488153330962-fjpml0b57ki5rsjs2uujee7hmsqr68ba.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC3pH1iK0RfTq4Tx7xOxt0mxV_7TP6POz8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "488153330962-fjpml0b57ki5rsjs2uujee7hmsqr68ba.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
