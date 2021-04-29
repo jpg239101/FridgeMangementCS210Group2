@@ -8,7 +8,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
-import com.google.firebase.quickstart.auth.R
+//import com.example.fridgemangementcs210group2.auth.R
 
 class FirebaseUIActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -83,8 +83,8 @@ class FirebaseUIActivity : AppCompatActivity() {
             AuthUI.getInstance()
                 .createSignInIntentBuilder()
                 .setAvailableProviders(providers)
-                .setLogo(R.drawable.my_great_logo) // Set logo drawable
-                .setTheme(R.style.MySuperAppTheme) // Set theme
+                    // .setLogo(R.drawable.ic_launcher.png) // look for logo
+              //  .setTheme(R.style.MySuperAppTheme) // look for theme
                 .build(),
             RC_SIGN_IN)
         // [END auth_fui_theme_logo]
@@ -109,5 +109,4 @@ class FirebaseUIActivity : AppCompatActivity() {
 
         private const val RC_SIGN_IN = 123
     }
-}
 }
