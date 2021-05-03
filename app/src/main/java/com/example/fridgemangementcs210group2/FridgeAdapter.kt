@@ -15,7 +15,7 @@ class FridgeAdapter(
     private val fridges: MutableList<Fridge>
 ): RecyclerView.Adapter<FridgeAdapter.FridgeViewHolder>() {
     class FridgeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
-
+    //links recycler view objects to the fridge_item.xml
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FridgeViewHolder {
         return FridgeViewHolder(
             LayoutInflater.from(parent.context).inflate(
@@ -26,11 +26,12 @@ class FridgeAdapter(
             )
         )
     }
-
+    //adds a fridge to the list
     fun addFridge(fridge: Fridge){
         fridges.add(fridge)
         notifyItemInserted(fridges.size-1)
     }
+    //deletes a fridge from the list
     fun deleteFridge(){
         fridges.removeAll { fridge ->
             fridge.isChecked
@@ -38,6 +39,7 @@ class FridgeAdapter(
         notifyDataSetChanged()
     }
 
+    //sets up actions on the fridge item including setting the title and link to the item list
     override fun onBindViewHolder(holder: FridgeViewHolder, position: Int) {
         val curFridge = fridges[position]
         val context = holder.itemView.context
@@ -56,7 +58,7 @@ class FridgeAdapter(
             }
         }
     }
-
+    //number of fridges
     override fun getItemCount(): Int {
         return fridges.size
     }

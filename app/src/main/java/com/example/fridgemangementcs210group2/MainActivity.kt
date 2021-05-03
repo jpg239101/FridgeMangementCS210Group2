@@ -25,28 +25,31 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
+        //creates a fridge adapter for the recycler view
         fridgeAdapter = FridgeAdapter(mutableListOf())
-
+        //sets up recycler view
         rvFridges.adapter = fridgeAdapter
         rvFridges.layoutManager = LinearLayoutManager(this)
-
+        //button to add a fridge to the list
         btnAddFridge.setOnClickListener{
             val fridgeName = etFridgeName.text.toString()
             if (fridgeName.isNotEmpty()){
                 val fridge = Fridge(fridgeName,false, ArrayList<Food>(256))
                 fridgeAdapter.addFridge(fridge)
+                //saves fridge to firestore
                 saveFridge(fridge)
                 etFridgeName.text.clear()
                 Toast.makeText(this,"Fridge Added",Toast.LENGTH_LONG).show()
             }
         }
+        //button to delete fridges with checked boxes
         btnDeleteFridge.setOnClickListener{
             fridgeAdapter.deleteFridge()
             Toast.makeText(this,"Fridge Deleted",Toast.LENGTH_LONG).show()
         }
 
     }
+    //sets up the saving of a fridge objet to the firestore
     private fun saveFridge(fridge: Fridge) = CoroutineScope(Dispatchers.IO).launch {
         try {
             fridgeCollectionRef.add(fridge).await()
