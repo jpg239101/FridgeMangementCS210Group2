@@ -17,23 +17,24 @@ import kotlinx.coroutines.tasks.await
 class InventoryActivity: AppCompatActivity() {
 
     private lateinit var foodAdapter: FoodAdapter
-    private val fridgeCollectionRef = Firebase.firestore.collection("Fridges")
-    private val fridgeTitle =  intent.getStringExtra("EXTRA_FRIDGE")
+    //private val fridgeCollectionRef = Firebase.firestore.collection("Fridges")
+
+    //private val fridgeTitle =  intent.getStringExtra("EXTRA_FRIDGE")
     private var foodList: ArrayList<Food> = ArrayList<Food>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_inventory)
-        retrieveFoodList()
+        //retrieveFoodList()
         foodAdapter = FoodAdapter(foodList)
 
         rvFood.adapter = foodAdapter
         rvFood.layoutManager = LinearLayoutManager(this)
 
-        btnAddFood.setOnClickListener{
+        btnAddFood.setOnClickListener {
             val foodName = etFoodName.text.toString()
-            if (foodName.isNotEmpty()){
-                val food = Food(foodName,false,1)
+            if (foodName.isNotEmpty()) {
+                val food = Food(foodName, false, 1)
                 foodAdapter.addFood(food)
                 etFoodName.text.clear()
             }
@@ -45,8 +46,9 @@ class InventoryActivity: AppCompatActivity() {
             // to be implemented
         }
     }
+}
 
-    private fun updateFridge() = CoroutineScope(Dispatchers.IO).launch {
+   /* private fun updateFridge() = CoroutineScope(Dispatchers.IO).launch {
         val querySnapshot = fridgeCollectionRef
             .whereEqualTo("title",fridgeTitle)
             .get()
@@ -81,4 +83,4 @@ class InventoryActivity: AppCompatActivity() {
         }
 
     }
-}
+}*/

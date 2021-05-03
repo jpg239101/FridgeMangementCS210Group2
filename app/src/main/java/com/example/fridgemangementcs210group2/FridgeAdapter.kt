@@ -49,7 +49,7 @@ class FridgeAdapter(
             }
             btnSeeItems.setOnClickListener {
                 Intent(context, InventoryActivity::class.java).also{
-                    it.putExtra("EXTRA_FRIDGE",curFridge.title)
+                    //it.putExtra("EXTRA_FRIDGE",curFridge.title)
                     context.startActivity(it)
                 }
 
