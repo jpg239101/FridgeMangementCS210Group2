@@ -2,9 +2,11 @@ package com.example.fridgemangementcs210group2
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fridge_item.*
@@ -18,6 +20,7 @@ import java.lang.Exception
 class MainActivity : AppCompatActivity() {
 
     private lateinit var fridgeAdapter: FridgeAdapter
+    private var dbFridgeList = mutableListOf<Fridge>()
     private val fridgeCollectionRef = Firebase.firestore.collection("Fridges")
 
 
@@ -25,9 +28,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        //gets list of fridges from firebase
+        retrieveFridge()
         //creates a fridge adapter for the recycler view
-        fridgeAdapter = FridgeAdapter(mutableListOf())
+        fridgeAdapter = FridgeAdapter(dbFridgeList)
         //sets up recycler view
+
+        //subscribe to realtime updates
+        //subscribeToRealtimeUpdates()
         rvFridges.adapter = fridgeAdapter
         rvFridges.layoutManager = LinearLayoutManager(this)
         //button to add a fridge to the list
@@ -49,6 +57,7 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+
     //sets up the saving of a fridge objet to the firestore
     private fun saveFridge(fridge: Fridge) = CoroutineScope(Dispatchers.IO).launch {
         try {
@@ -61,6 +70,39 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this@MainActivity,e.message, Toast.LENGTH_LONG).show()
             }
         }
+    }
+    private fun subscribeToRealtimeUpdates(){
+        fridgeCollectionRef.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+            firebaseFirestoreException?.let {
+                Toast.makeText(this,it.message,Toast.LENGTH_LONG).show()
+                return@addSnapshotListener
+            }
+            querySnapshot?.let {
+                for (document in querySnapshot.documents){
+                    val fridge = document.toObject<Fridge>()
+                    if (fridge != null) {
+                        if (!dbFridgeList.contains(fridge)) {
+                            dbFridgeList.add(fridge)
+                            fridgeAdapter.addFridge(fridge)
+                        }
+                    }
+                }
+            }
+        }
+    }
+    private fun retrieveFridge() = CoroutineScope(Dispatchers.IO).launch {
+        try {
+            val querySnapshot = fridgeCollectionRef.get().await()
+            for(document in querySnapshot.documents) {
+                val fridge = document.toObject<Fridge>()
+                if (fridge != null) {
+                    dbFridgeList.add(fridge)
+                }
+            }
+        } catch(e: Exception) {
+            Log.e("Retrieve fridge list","Failure")
+        }
+
     }
 
 }
