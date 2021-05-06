@@ -57,6 +57,27 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+    private fun deleteFridge() = CoroutineScope(Dispatchers.IO).launch{
+        val querySnapshot = fridgeCollectionRef
+            .get()
+            .await()
+        if(querySnapshot.documents.isNotEmpty()) {
+            for(document in querySnapshot) {
+                try {
+                    val fridge = document.toObject<Fridge>()
+                    if(fridge.isChecked){
+                        fridgeCollectionRef.document(document.id).delete()
+                            .addOnSuccessListener { Log.d("main act","DocumentSnapshot successfully deleted!") }
+                            .addOnFailureListener { e -> Log.w("main act", "Error deleting document", e) }
+                    }
+                    } catch (e: Exception) {
+                    Log.e("Update Food List","Failure")
+                }
+            }
+        } else {
+            Log.e("update list","Failure could not find fridge")
+        }
+    }
 
     //sets up the saving of a fridge objet to the firestore
     private fun saveFridge(fridge: Fridge) = CoroutineScope(Dispatchers.IO).launch {
