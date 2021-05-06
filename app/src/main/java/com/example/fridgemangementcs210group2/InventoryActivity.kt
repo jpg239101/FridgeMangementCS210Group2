@@ -34,7 +34,7 @@ class InventoryActivity: AppCompatActivity() {
         rvFood.adapter = foodAdapter
         rvFood.layoutManager = LinearLayoutManager(this)
 
-        //add a food to the recyler view when the add button is clicked
+        //add a food to the recycler view when the add button is clicked
         btnAddFood.setOnClickListener {
             val foodName = etFoodName.text.toString()
             if (foodName.isNotEmpty()) {
