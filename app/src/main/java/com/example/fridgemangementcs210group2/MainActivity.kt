@@ -53,6 +53,7 @@ class MainActivity : AppCompatActivity() {
         //button to delete fridges with checked boxes
         btnDeleteFridge.setOnClickListener{
             fridgeAdapter.deleteFridge()
+            deleteFridge()
             Toast.makeText(this,"Fridge Deleted",Toast.LENGTH_LONG).show()
         }
 
