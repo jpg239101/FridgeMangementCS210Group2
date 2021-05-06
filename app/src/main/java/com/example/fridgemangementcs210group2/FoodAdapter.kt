@@ -15,7 +15,7 @@ import java.time.LocalDate.parse
 class FoodAdapter(
     //store food objects for recycler view
     val foods: ArrayList<Food>
-): RecyclerView.Adapter<FoodAdapter.FoodViewHolder>() {
+) : RecyclerView.Adapter<FoodAdapter.FoodViewHolder>() {
     //creates view holder class
     class FoodViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
@@ -29,11 +29,13 @@ class FoodAdapter(
             )
         )
     }
+
     //add a food object to the list
     fun addFood(food: Food) {
         foods.add(food)
         notifyItemInserted(foods.size - 1)
     }
+
     //delete a food object from the list
     fun deleteFood() {
         foods.removeAll { food ->
@@ -41,7 +43,6 @@ class FoodAdapter(
         }
         notifyDataSetChanged()
     }
-
 
 
     //gets and sets up the food_item being listed
@@ -56,9 +57,10 @@ class FoodAdapter(
 
         }
     }
+
     //number of food items
     override fun getItemCount(): Int {
-            return foods.size
+        return foods.size
     }
 
 }

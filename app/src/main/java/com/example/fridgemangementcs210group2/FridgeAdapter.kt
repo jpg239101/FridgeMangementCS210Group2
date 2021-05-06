@@ -23,8 +23,9 @@ import java.lang.Exception
 
 class FridgeAdapter(
     private val fridges: MutableList<Fridge>
-): RecyclerView.Adapter<FridgeAdapter.FridgeViewHolder>() {
+) : RecyclerView.Adapter<FridgeAdapter.FridgeViewHolder>() {
     class FridgeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+
     //links recycler view objects to the fridge_item.xml
     private val fridgeCollectionRef = Firebase.firestore.collection("Fridges")
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FridgeViewHolder {
@@ -37,13 +38,15 @@ class FridgeAdapter(
             )
         )
     }
+
     //adds a fridge to the list
-    fun addFridge(fridge: Fridge){
+    fun addFridge(fridge: Fridge) {
         fridges.add(fridge)
-        notifyItemInserted(fridges.size-1)
+        notifyItemInserted(fridges.size - 1)
     }
+
     //deletes a fridge from the list
-    fun deleteFridge(){
+    fun deleteFridge() {
         fridges.removeAll { fridge ->
             fridge.isChecked
         }
@@ -57,12 +60,12 @@ class FridgeAdapter(
         holder.itemView.apply {
             tvFridgeTitle.text = curFridge.title
             cbDone.isChecked = curFridge.isChecked
-            cbDone.setOnCheckedChangeListener{_,isChecked ->
+            cbDone.setOnCheckedChangeListener { _, isChecked ->
                 updateFridge(curFridge.title)
                 curFridge.isChecked = !curFridge.isChecked
             }
             btnSeeItems.setOnClickListener {
-                Intent(context, InventoryActivity::class.java).also{
+                Intent(context, InventoryActivity::class.java).also {
                     //it.putExtra("EXTRA_FRIDGE",curFridge.title)
                     context.startActivity(it)
                 }
@@ -73,19 +76,19 @@ class FridgeAdapter(
 
     private fun updateFridge(title: String) = CoroutineScope(Dispatchers.IO).launch {
         val querySnapshot = fridgeCollectionRef
-            .whereEqualTo("title",title)
+            .whereEqualTo("title", title)
             .get()
             .await()
-        if(querySnapshot.documents.isNotEmpty()) {
-            for(document in querySnapshot) {
+        if (querySnapshot.documents.isNotEmpty()) {
+            for (document in querySnapshot) {
                 try {
-                    fridgeCollectionRef.document(document.id).update("checked",false ).await()
+                    fridgeCollectionRef.document(document.id).update("checked", false).await()
                 } catch (e: Exception) {
-                    Log.e("Update Food List","Failure")
+                    Log.e("Update Food List", "Failure")
                 }
             }
         } else {
-            Log.e("update list","Failure could not find fridge")
+            Log.e("update list", "Failure could not find fridge")
         }
     }
 

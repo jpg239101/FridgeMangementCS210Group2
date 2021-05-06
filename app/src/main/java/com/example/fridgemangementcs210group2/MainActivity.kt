@@ -39,44 +39,45 @@ class MainActivity : AppCompatActivity() {
         rvFridges.adapter = fridgeAdapter
         rvFridges.layoutManager = LinearLayoutManager(this)
         //button to add a fridge to the list
-        btnAddFridge.setOnClickListener{
+        btnAddFridge.setOnClickListener {
             val fridgeName = etFridgeName.text.toString()
-            if (fridgeName.isNotEmpty()){
-                val fridge = Fridge(fridgeName,false, ArrayList<Food>(256))
+            if (fridgeName.isNotEmpty()) {
+                val fridge = Fridge(fridgeName, false, ArrayList<Food>(256))
                 fridgeAdapter.addFridge(fridge)
                 //saves fridge to firestore
                 saveFridge(fridge)
                 etFridgeName.text.clear()
-                Toast.makeText(this,"Fridge Added",Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Fridge Added", Toast.LENGTH_LONG).show()
             }
         }
         //button to delete fridges with checked boxes
-        btnDeleteFridge.setOnClickListener{
+        btnDeleteFridge.setOnClickListener {
             fridgeAdapter.deleteFridge()
             deleteFridge()
-            Toast.makeText(this,"Fridge Deleted",Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Fridge Deleted", Toast.LENGTH_LONG).show()
         }
 
     }
-    private fun deleteFridge() = CoroutineScope(Dispatchers.IO).launch{
+
+    private fun deleteFridge() = CoroutineScope(Dispatchers.IO).launch {
         val querySnapshot = fridgeCollectionRef
             .get()
             .await()
-        if(querySnapshot.documents.isNotEmpty()) {
-            for(document in querySnapshot) {
+        if (querySnapshot.documents.isNotEmpty()) {
+            for (document in querySnapshot) {
                 try {
                     val fridge = document.toObject<Fridge>()
-                    if(fridge.isChecked){
+                    if (fridge.isChecked) {
                         fridgeCollectionRef.document(document.id).delete()
-                            .addOnSuccessListener { Log.d("main act","DocumentSnapshot successfully deleted!") }
+                            .addOnSuccessListener { Log.d("main act", "DocumentSnapshot successfully deleted!") }
                             .addOnFailureListener { e -> Log.w("main act", "Error deleting document", e) }
                     }
-                    } catch (e: Exception) {
-                    Log.e("Update Food List","Failure")
+                } catch (e: Exception) {
+                    Log.e("Update Food List", "Failure")
                 }
             }
         } else {
-            Log.e("update list","Failure could not find fridge")
+            Log.e("update list", "Failure could not find fridge")
         }
     }
 
@@ -84,23 +85,24 @@ class MainActivity : AppCompatActivity() {
     private fun saveFridge(fridge: Fridge) = CoroutineScope(Dispatchers.IO).launch {
         try {
             fridgeCollectionRef.add(fridge).await()
-            withContext(Dispatchers.Main){
-                Toast.makeText(this@MainActivity,"Successfully saved", Toast.LENGTH_LONG).show()
+            withContext(Dispatchers.Main) {
+                Toast.makeText(this@MainActivity, "Successfully saved", Toast.LENGTH_LONG).show()
             }
-        }catch (e: Exception){
-            withContext(Dispatchers.Main){
-                Toast.makeText(this@MainActivity,e.message, Toast.LENGTH_LONG).show()
+        } catch (e: Exception) {
+            withContext(Dispatchers.Main) {
+                Toast.makeText(this@MainActivity, e.message, Toast.LENGTH_LONG).show()
             }
         }
     }
-    private fun subscribeToRealtimeUpdates(){
+
+    private fun subscribeToRealtimeUpdates() {
         fridgeCollectionRef.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
             firebaseFirestoreException?.let {
-                Toast.makeText(this,it.message,Toast.LENGTH_LONG).show()
+                Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()
                 return@addSnapshotListener
             }
             querySnapshot?.let {
-                for (document in querySnapshot.documents){
+                for (document in querySnapshot.documents) {
                     val fridge = document.toObject<Fridge>()
                     if (fridge != null) {
                         if (!dbFridgeList.contains(fridge)) {
@@ -112,17 +114,18 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
     private fun retrieveFridge() = CoroutineScope(Dispatchers.IO).launch {
         try {
             val querySnapshot = fridgeCollectionRef.get().await()
-            for(document in querySnapshot.documents) {
+            for (document in querySnapshot.documents) {
                 val fridge = document.toObject<Fridge>()
                 if (fridge != null) {
                     dbFridgeList.add(fridge)
                 }
             }
-        } catch(e: Exception) {
-            Log.e("Retrieve fridge list","Failure")
+        } catch (e: Exception) {
+            Log.e("Retrieve fridge list", "Failure")
         }
 
     }
