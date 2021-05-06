@@ -40,16 +40,22 @@ class InventoryActivity: AppCompatActivity() {
             if (foodName.isNotEmpty()) {
                 val food = Food(foodName, false, 1)
                 foodAdapter.addFood(food)
+
+                Toast.makeText(this,"Successfully added", Toast.LENGTH_LONG).show()
+
                 etFoodName.text.clear()
             }
         }
         //delete food
         btnDeleteFood.setOnClickListener {
             foodAdapter.deleteFood()
+            Toast.makeText(this,"Successfully deleted", Toast.LENGTH_LONG).show()
+
         }
         //link to new activity counting a barcode scanner for upcs
         btnScanLabel.setOnClickListener {
             // to be implemented
+            Toast.makeText(this,"This feature isn't ready yet", Toast.LENGTH_LONG).show()
         }
     }
 }
